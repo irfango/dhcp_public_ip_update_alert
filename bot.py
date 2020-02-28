@@ -4,9 +4,9 @@ import configparser as cfg
 
 class telegram_chatbot():
 
-    def __init__(self, config):
-        self.token = self.read_token_from_config_file(config)
-        self.base = "https://api.telegram.org/bot{}".format(self.token)
+    def __init__(self, telegram_config):
+        self.telegram_bot_token = self.read_token_from_config_file(telegram_config)
+        self.base = "https://api.telegram.org/bot{}".format(self.telegram_bot_token)
 
     # Get updates
     def get_updates(self, offset=None):
@@ -26,5 +26,5 @@ class telegram_chatbot():
     def read_token_from_config_file(self, config):
         parser = cfg.ConfigParser()
         parser.read(config)
-        return parser.get('creds', 'token')
+        return parser.get('creds', 'telegram_bot_token')
 

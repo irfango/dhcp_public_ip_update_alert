@@ -2,16 +2,23 @@
 #create file myCurrentIP.txt in the python script directory
 #Email Alert:  Make sure SENDER email is status 'Less secure app access' = "ON" https://myaccount.google.com/lesssecureapps?
 
-
+from bot import telegram_chatbot
 import urllib.request
 import time
 import smtplib
+import os
+
+# Defining Base Path
+basePath = os.path.dirname(os.path.abspath(__file__))
 
 #Email Alert Details Gmail.
 SENDER = "SENDER EMAIL HERE"
 PASS = "SENDER PASSWORD HERE"
 RECIVER = "RECIVER EMAIL HERE"
 
+TELEGRAM_CHAT_ID = "RECIVER TELEGRAM CHAT_ID HERE"
+
+bot = telegram_chatbot(basePath + "/telegram_config.cfg")
 
 FetchURL = urllib.request.urlopen("https://ident.me/")
 Data = FetchURL.read()
@@ -19,6 +26,7 @@ Data = FetchURL.read()
 myIP = Data.decode("utf8")
 FetchURL.close()
 print(myIP)
+
 
 FILE = open("myCurrentIP.txt", "r")
 CurrentIP = FILE.read()
@@ -35,6 +43,9 @@ elif myIP != CurrentIP:
     #time.sleep(1)
     print("Current IP is " + CurrentIP)
     FILE.close()
+
+    # Telegram Bot Sends Message
+    bot.send_message(myIP, TELEGRAM_CHAT_ID)
 
     #Email Alert
     server = smtplib.SMTP('smtp.gmail.com', 587)
